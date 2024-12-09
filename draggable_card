@@ -1,0 +1,32 @@
+from kivy.uix.behaviors import DragBehavior
+from kivy.uix.button import Button
+from kivy.app import App
+
+
+class DraggableCard(DragBehavior, Button):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.start_pos = (0, 0)
+
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos):
+            self.start_pos = self.pos
+        return super().on_touch_down(touch)
+
+    def on_touch_up(self, touch):
+        """
+        Handles the drop logic.
+        """
+        app = App.get_running_app()
+        root = app.root
+
+        # Check for collision with valid zones
+        for zone in [root.ids.monster_zone, root.ids.spell_zone]:
+            for slot in zone.children:
+                if self.collide_widget(slot):
+                    print(f"Card {self.text} placed in {slot.id}")
+                    self.pos = slot.pos  # Snap card to slot
+                    return
+
+        # Reset position if dropped in an invalid location
+        self.pos = self.start_pos

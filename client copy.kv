@@ -1,0 +1,176 @@
+BoxLayout:
+    orientation: 'horizontal'  # Split the screen horizontally
+    padding: 10
+    spacing: 10
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background.png'
+
+    # Left side: a small vertical layout for the log
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_x: 0.  # Make it smaller width (20% of width)
+        spacing: 10
+        Label:
+            text: "Game Log:"
+            size_hint_y: None
+            height: 30
+            bold: True
+        RecycleView:
+            id: log_view
+            viewclass: 'Label'
+            scroll_type: ['bars', 'content']
+            bar_width: 10
+            effect_cls: 'ScrollEffect'
+            RecycleBoxLayout:
+                default_size: None, None
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+                spacing: 5
+                padding: 10
+
+    # Right side: Your main UI (status, stats, hand, buttons)
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 10
+
+        Label:
+            id: status_label
+            text: "Not connected"
+            size_hint_y: None
+            height: 50
+            bold: True
+
+        # Player Stats Row
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 50
+            spacing: 20
+            padding: 10
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 5
+                Image:
+                    source: 'images/heart.png'
+                    size_hint_x: None
+                    width: 30
+                Label:
+                    id: health_label
+                    text: "Your HP: 20"
+                    bold: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 5
+                Image:
+                    source: 'images/mana.png'
+                    size_hint_x: None
+                    width: 30
+                Label:
+                    id: mana_label
+                    text: "Your Mana: 10"
+                    bold: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 5
+                Image:
+                    source: 'images/shield.png'
+                    size_hint_x: None
+                    width: 30
+                Label:
+                    id: shield_label
+                    text: "Your Shield: 0"
+                    bold: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 5
+                Image:
+                    source: 'images/heart.png'
+                    size_hint_x: None
+                    width: 30
+                Label:
+                    id: enemy_health_label
+                    text: "Enemy HP: 20"
+                    bold: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 5
+                Image:
+                    source: 'images/mana.png'
+                    size_hint_x: None
+                    width: 30
+                Label:
+                    id: enemy_mana_label
+                    text: "Enemy Mana: 10"
+                    bold: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 5
+                Image:
+                    source: 'images/shield.png'
+                    size_hint_x: None
+                    width: 30
+                Label:
+                    id: enemy_shield_label
+                    text: "Enemy Shield: 0"
+                    bold: True
+
+        # Action buttons
+        BoxLayout:
+            size_hint_y: None
+            height: 50
+            spacing: 10
+            Button:
+                text: "Connect"
+                on_press: app.connect_to_server()
+            Button:
+                text: "Stats"
+                on_press: app.send_command("stats")
+            Button:
+                text: "Draw"
+                on_press: app.send_command("draw")
+            Button:
+                text: "End"
+                on_press: app.send_command("end")
+
+        # Play card
+        BoxLayout:
+            size_hint_y: None
+            height: 50
+            spacing: 10
+            TextInput:
+                id: card_id_input
+                hint_text: "Card ID"
+                multiline: False
+            Button:
+                text: "Play"
+                on_press: app.play_card(card_id_input.text)
+
+        Label:
+            text: "Your Hand:"
+            size_hint_y: None
+            height: 30
+            bold: True
+
+        ScrollView:
+            size_hint: (1, 0.4)
+            GridLayout:
+                id: hand_layout
+                cols: 3
+                size_hint_y: None
+                row_default_height: 200
+                row_force_default: True
+                height: self.minimum_height
+                spacing: 10
+                padding: 10

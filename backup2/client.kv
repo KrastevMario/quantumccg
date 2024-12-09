@@ -1,0 +1,263 @@
+#:import Window kivy.core.window.Window
+
+FloatLayout:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background.png'
+
+    # Main UI: Top bar spanning from left to right, 1/4 height of the window
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: 1, 0.25  # Full width and 1/4 height
+        pos_hint: {'x': 0, 'y': 0.75}  # Positioned at the top of the screen
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'images/stats_bg.png'
+
+        Label:
+            id: status_label
+            text: "Not connected"
+            size_hint_y: None
+            height: Window.height * 0.05  # Dynamic height
+            bold: True
+
+        # Player Stats Row
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: Window.height * 0.09  # Dynamic height
+            spacing: Window.width * 0.01  # Dynamic spacing
+            padding: Window.width * 0.01  # Dynamic padding
+
+            BoxLayout:
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.4, 0.6, 1  # RGBA for background color (blue tone)
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/heart.png'
+                    size_hint: 0.4, 1
+                    width: Window.width * 0.05
+                Label:
+                    id: health_label
+                    text: "Your HP: 20"
+                    font_name: 'fonts/stats_font.ttf'  # Path to a custom gaming font
+                    font_size: Window.width * 0.02  # Increase font size dynamically
+                    bold: True
+                    color: 1, 1, 0, 1  # Yellow text color
+                    outline_color: 0, 0, 0, 1  # Black outline
+                    outline_width: 2  # Add a text outline
+                    halign: 'center'
+                    valign: 'middle'
+
+            BoxLayout:
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.4, 0.6, 1  # RGBA for background color (blue tone)
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/mana.png'
+                    size_hint: 0.4, 1
+                    width: Window.width * 0.05
+                Label:
+                    id: health_label
+                    text: "Your HP: 20"
+                    font_name: 'fonts/stats_font.ttf'  # Path to a custom gaming font
+                    font_size: Window.width * 0.02  # Increase font size dynamically
+                    bold: True
+                    color: 1, 1, 0, 1  # Yellow text color
+                    outline_color: 0, 0, 0, 1  # Black outline
+                    outline_width: 2  # Add a text outline
+                    halign: 'center'
+                    valign: 'middle'
+
+            BoxLayout:
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.4, 0.6, 1  # RGBA for background color (blue tone)
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/shield.png'
+                    size_hint: 0.4, 1
+                    width: Window.width * 0.05
+                Label:
+                    id: health_label
+                    text: "Your HP: 20"
+                    font_name: 'fonts/stats_font.ttf'  # Path to a custom gaming font
+                    font_size: Window.width * 0.02  # Increase font size dynamically
+                    bold: True
+                    color: 1, 1, 0, 1  # Yellow text color
+                    outline_color: 0, 0, 0, 1  # Black outline
+                    outline_width: 2  # Add a text outline
+                    halign: 'center'
+                    valign: 'middle'
+
+            BoxLayout:
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.4, 0.6, 1  # RGBA for background color (blue tone)
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/heart.png'
+                    size_hint: 0.4, 1
+                    width: Window.width * 0.05
+                Label:
+                    id: health_label
+                    text: "Your HP: 20"
+                    font_name: 'fonts/stats_font.ttf'  # Path to a custom gaming font
+                    font_size: Window.width * 0.02  # Increase font size dynamically
+                    bold: True
+                    color: 1, 1, 0, 1  # Yellow text color
+                    outline_color: 0, 0, 0, 1  # Black outline
+                    outline_width: 2  # Add a text outline
+                    halign: 'center'
+                    valign: 'middle'
+
+            BoxLayout:
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.4, 0.6, 1  # RGBA for background color (blue tone)
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/mana.png'
+                    size_hint: 0.4, 1
+                    width: Window.width * 0.05
+                Label:
+                    id: health_label
+                    text: "Your HP: 20"
+                    font_name: 'fonts/stats_font.ttf'  # Path to a custom gaming font
+                    font_size: Window.width * 0.02  # Increase font size dynamically
+                    bold: True
+                    color: 1, 1, 0, 1  # Yellow text color
+                    outline_color: 0, 0, 0, 1  # Black outline
+                    outline_width: 2  # Add a text outline
+                    halign: 'center'
+                    valign: 'middle'
+
+            BoxLayout:
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.4, 0.6, 1  # RGBA for background color (blue tone)
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/shield.png'
+                    size_hint: 0.4, 1
+                    width: Window.width * 0.05
+                Label:
+                    id: health_label
+                    text: "Your HP: 20"
+                    font_name: 'fonts/stats_font.ttf'  # Path to a custom gaming font
+                    font_size: Window.width * 0.02  # Increase font size dynamically
+                    bold: True
+                    color: 1, 1, 0, 1  # Yellow text color
+                    outline_color: 0, 0, 0, 1  # Black outline
+                    outline_width: 2  # Add a text outline
+                    halign: 'center'
+                    valign: 'middle'
+
+        # Action buttons
+        BoxLayout:
+            size_hint_y: None
+            height: Window.height * 0.05  # Dynamic height
+            spacing: Window.width * 0.01  # Dynamic spacing
+            Button:
+                text: "Connect"
+                on_press: app.connect_to_server()
+            Button:
+                text: "Stats"
+                on_press: app.send_command("stats")
+            Button:
+                text: "Draw"
+                on_press: app.send_command("draw")
+            Button:
+                text: "End"
+                on_press: app.send_command("end")
+
+        # Play card
+        BoxLayout:
+            size_hint_y: None
+            height: Window.height * 0.05  # Dynamic height
+            spacing: Window.width * 0.01
+            TextInput:
+                id: card_id_input
+                hint_text: "Card ID"
+                multiline: False
+            Button:
+                text: "Play"
+                on_press: app.play_card(card_id_input.text)
+
+    # Hand Layout at the Bottom (CCG Style)
+    FloatLayout:
+        size_hint: 1, None
+        height: Window.height * 0.25  # Dynamic height for hand area
+        pos_hint: {'x': 0, 'y': 0}  # Positioned at the bottom of the screen
+
+        Label:
+            text: "Your Hand:"
+            size_hint: None, None
+            size: Window.width * 0.2, Window.height * 0.05  # Dynamic size
+            pos: Window.width * 0.4, Window.height * 0.2  # Centered above cards
+            bold: True
+
+        ScrollView:
+            size_hint: 1, 1
+            pos_hint: {'x': 0, 'y': 0}  # Spans the entire bottom area
+            GridLayout:
+                id: hand_layout
+                cols: 7  # Space for 7 cards in hand
+                size_hint_y: None
+                row_default_height: Window.height * 0.2  # Dynamic card height
+                row_force_default: True
+                height: self.minimum_height
+                spacing: Window.width * 0.01  # Dynamic spacing
+                padding: Window.width * 0.01
+
+    # Card Arena
+    FloatLayout:
+        size_hint: 1, None
+        height: Window.height * 0.4  # Dynamic height for the arena
+        pos_hint: {'x': 0, 'y': 0.25}  # Positioned above the hand
+
+        Label:
+            text: "Card Arena"
+            size_hint: None, None
+            size: Window.width * 0.2, Window.height * 0.05  # Dynamic size
+            pos: Window.width * 0.4, Window.height * 0.35  # Centered at the top of the arena
+            bold: True
+
+        GridLayout:
+            id: arena_layout
+            cols: 5  # Space for 5 cards in the arena
+            size_hint: 1, 1
+            row_default_height: Window.height * 0.2  # Dynamic card height
+            row_force_default: True
+            spacing: Window.width * 0.01  # Dynamic spacing
+            padding: Window.width * 0.01

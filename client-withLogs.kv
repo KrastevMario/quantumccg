@@ -1,0 +1,208 @@
+#:import Window kivy.core.window.Window
+
+FloatLayout:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/background.png'
+
+    # Log Box at Bottom-Left
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: None, None  # Disable automatic resizing
+        size: Window.width * 0.2, Window.height * 0.25  # Dynamic width and height for the log box
+        pos: Window.width * 0.01, Window.height * 0.01  # Dynamic position with padding
+
+        Label:
+            text: "Game Log:"
+            size_hint_y: None
+            height: Window.height * 0.05  # Dynamic height for the label
+            bold: True
+
+        RecycleView:
+            id: log_view
+            viewclass: 'Label'
+            scroll_type: ['bars', 'content']
+            bar_width: Window.width * 0.01  # Dynamic bar width
+            effect_cls: 'ScrollEffect'
+            RecycleBoxLayout:
+                default_size: None, None
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+                spacing: Window.height * 0.005  # Dynamic spacing between lines
+                padding: Window.width * 0.01  # Dynamic padding for the layout
+
+    # Main UI: Top bar spanning from left to right, 1/4 height of the window
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: 1, 0.25  # Full width and 1/4 height
+        pos_hint: {'x': 0, 'y': 0.75}  # Positioned at the top of the screen
+
+        Label:
+            id: status_label
+            text: "Not connected"
+            size_hint_y: None
+            height: Window.height * 0.05  # Dynamic height
+            bold: True
+
+        # Player Stats Row
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: Window.height * 0.05  # Dynamic height
+            spacing: Window.width * 0.01  # Dynamic spacing
+            padding: Window.width * 0.01  # Dynamic padding
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/heart.png'
+                    size_hint_x: None
+                    width: Window.width * 0.03
+                Label:
+                    id: health_label
+                    text: "Your HP: 20"
+                    bold: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/mana.png'
+                    size_hint_x: None
+                    width: Window.width * 0.03
+                Label:
+                    id: mana_label
+                    text: "Your Mana: 10"
+                    bold: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/shield.png'
+                    size_hint_x: None
+                    width: Window.width * 0.03
+                Label:
+                    id: shield_label
+                    text: "Your Shield: 0"
+                    bold: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/heart.png'
+                    size_hint_x: None
+                    width: Window.width * 0.03
+                Label:
+                    id: enemy_health_label
+                    text: "Enemy HP: 20"
+                    bold: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/mana.png'
+                    size_hint_x: None
+                    width: Window.width * 0.03
+                Label:
+                    id: enemy_mana_label
+                    text: "Enemy Mana: 10"
+                    bold: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: Window.width * 0.005
+                Image:
+                    source: 'images/shield.png'
+                    size_hint_x: None
+                    width: Window.width * 0.03
+                Label:
+                    id: enemy_shield_label
+                    text: "Enemy Shield: 0"
+                    bold: True
+
+        # Action buttons
+        BoxLayout:
+            size_hint_y: None
+            height: Window.height * 0.05  # Dynamic height
+            spacing: Window.width * 0.01  # Dynamic spacing
+            Button:
+                text: "Connect"
+                on_press: app.connect_to_server()
+            Button:
+                text: "Stats"
+                on_press: app.send_command("stats")
+            Button:
+                text: "Draw"
+                on_press: app.send_command("draw")
+            Button:
+                text: "End"
+                on_press: app.send_command("end")
+
+        # Play card
+        BoxLayout:
+            size_hint_y: None
+            height: Window.height * 0.05  # Dynamic height
+            spacing: Window.width * 0.01
+            TextInput:
+                id: card_id_input
+                hint_text: "Card ID"
+                multiline: False
+            Button:
+                text: "Play"
+                on_press: app.play_card(card_id_input.text)
+
+    # Hand Layout at the Bottom (CCG Style)
+    FloatLayout:
+        size_hint: 1, None
+        height: Window.height * 0.25  # Dynamic height for hand area
+        pos_hint: {'x': 0, 'y': 0}  # Positioned at the bottom of the screen
+
+        Label:
+            text: "Your Hand:"
+            size_hint: None, None
+            size: Window.width * 0.2, Window.height * 0.05  # Dynamic size
+            pos: Window.width * 0.4, Window.height * 0.2  # Centered above cards
+            bold: True
+
+        ScrollView:
+            size_hint: 1, 1
+            pos_hint: {'x': 0, 'y': 0}  # Spans the entire bottom area
+            GridLayout:
+                id: hand_layout
+                cols: 7  # Space for 7 cards in hand
+                size_hint_y: None
+                row_default_height: Window.height * 0.2  # Dynamic card height
+                row_force_default: True
+                height: self.minimum_height
+                spacing: Window.width * 0.01  # Dynamic spacing
+                padding: Window.width * 0.01
+
+    # Card Arena
+    FloatLayout:
+        size_hint: 1, None
+        height: Window.height * 0.4  # Dynamic height for the arena
+        pos_hint: {'x': 0, 'y': 0.25}  # Positioned above the hand
+
+        Label:
+            text: "Card Arena"
+            size_hint: None, None
+            size: Window.width * 0.2, Window.height * 0.05  # Dynamic size
+            pos: Window.width * 0.4, Window.height * 0.35  # Centered at the top of the arena
+            bold: True
+
+        GridLayout:
+            id: arena_layout
+            cols: 5  # Space for 5 cards in the arena
+            size_hint: 1, 1
+            row_default_height: Window.height * 0.2  # Dynamic card height
+            row_force_default: True
+            spacing: Window.width * 0.01  # Dynamic spacing
+            padding: Window.width * 0.01
