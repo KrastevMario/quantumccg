@@ -216,24 +216,40 @@ class ClientUI(App):
 
         # Add enemy monsters (top row)
         for monster in enemy_monsters:
-            monster_card = self.create_monster_card(monster)
+            if monster:
+                monster_card = self.create_monster_card(monster)
+            else:
+                # Add an empty slot if no monster exists
+                monster_card = FloatLayout(size_hint=(None, None), size=(Window.width * 0.1, Window.height * 0.2))
             arena_layout.add_widget(monster_card)
 
         # Add player monsters (bottom row)
         for monster in player_monsters:
-            monster_card = self.create_monster_card(monster)
+            if monster:
+                monster_card = self.create_monster_card(monster)
+            else:
+                # Add an empty slot if no monster exists
+                monster_card = FloatLayout(size_hint=(None, None), size=(Window.width * 0.1, Window.height * 0.2))
             arena_layout.add_widget(monster_card)
+
 
     def create_monster_card(self, monster):
         if monster:
+            # Create the card container
             card_box = FloatLayout(size_hint=(None, None), size=(Window.width * 0.1, Window.height * 0.2))
 
-            # Background
+            # Add a background using canvas.before
             with card_box.canvas.before:
-                Color(rgba=(1, 1, 1, 1))  # Background color
-                Rectangle(size=card_box.size, pos=card_box.pos, source="images/card_background.png")
+                bg_color = Color(rgba=(1, 1, 1, 1))  # Background color (optional, can be removed)
+                bg_rect = Rectangle(source="images/card_background.png", size=card_box.size, pos=card_box.pos)
 
-            # Monster Image
+            # Bind the Rectangle's size and position to the card_box
+            card_box.bind(
+                pos=lambda instance, value: setattr(bg_rect, 'pos', value),
+                size=lambda instance, value: setattr(bg_rect, 'size', value)
+            )
+
+            # Add the monster image
             card_img_src = f"images/{monster['name'].lower()}.png" if os.path.exists(f"images/{monster['name'].lower()}.png") else "images/placeholder.png"
             card_image = Image(
                 source=card_img_src,
@@ -243,7 +259,7 @@ class ClientUI(App):
             )
             card_box.add_widget(card_image)
 
-            # Monster Name
+            # Add the monster's name
             monster_title = Label(
                 text=monster['name'],
                 font_name='fonts/stats_font.ttf',
@@ -257,9 +273,9 @@ class ClientUI(App):
             )
             card_box.add_widget(monster_title)
 
-            # Monster Stats
+            # Add the monster's stats
             monster_stats = Label(
-                text=f"HP: {monster['health']}\nATK: {monster['attack']}\nDEF: {monster['shield']}",
+                text=f"HP: {monster['health']}\nATK: {monster['attack']}\nDEF: {monster['shield']}\nP: {monster['owner']}",
                 font_name='fonts/stats_font.ttf',
                 font_size=Window.height * 0.015,
                 halign='center',
@@ -274,8 +290,10 @@ class ClientUI(App):
 
             return card_box
         else:
-            # Empty Slot
+            # Return an empty slot if no monster is present
             return FloatLayout(size_hint=(None, None), size=(Window.width * 0.1, Window.height * 0.2))
+
+
 
 
 if __name__ == '__main__':

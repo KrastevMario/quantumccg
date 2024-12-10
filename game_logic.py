@@ -2,7 +2,7 @@ import asyncio
 import json
 
 class Card:
-    def __init__(self, id, name, health, attack, mana, shield, type, cost, effect):
+    def __init__(self, id, name, health, attack, mana, shield, type, cost, effect, owner):
         self.id = id
         self.name = name
         self.health = health
@@ -12,6 +12,7 @@ class Card:
         self.type = type
         self.cost = cost
         self.effect = effect
+        self.owner = owner
 
     def to_dict(self):
         return {
@@ -24,19 +25,21 @@ class Card:
             "type": self.type,
             "cost": self.cost,
             "effect": self.effect,
+            "owner": self.owner
         }
 
 class Player:
     def __init__(self, websocket):
         self.websocket = websocket
+        self.id = 1
         self.name = "Player"
         self.health = 20
         self.mana = 10
         self.shield = 0
         self.deck = [
-            Card(1, "Fireball", 0, 0, 0, 0, "Spell", 3, "deal 5 damage"),
-            Card(2, "Monster1", 20, 139, 0, 0, "Monster", 2, "self gain 3 shield"),
-            Card(3, "Shield", 0, 0, 0, 0, "Spell", 2, "gain 3 shield"),
+            Card(1, "Fireball", 0, 0, 0, 0, "Spell", 3, "deal 5 damage", 0),
+            Card(2, "Shrodinger's monster", 20, 139, 0, 0, "Monster", 2, "self gain 3 shield", 0),
+            Card(3, "Shield", 0, 0, 0, 0, "Spell", 2, "gain 3 shield", 0),
         ]
         self.hand = []
         self.board = []

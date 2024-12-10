@@ -263,11 +263,12 @@ FloatLayout:
 
         GridLayout:
             id: arena_layout
-            cols: 5  # Each player has 5 monster slots
+            cols: 5  # Each player has up to 5 monster slots
             rows: 2  # Two rows: one for each player's monsters
             size_hint: None, None
             size: Window.width * 0.8, Window.height * 0.3  # Adjust size for the grid
-            pos_hint: {'x': 0.1, 'y': 0.1}  # Centered horizontally, positioned at 10% from bottom
+            pos_hint: {'x': 0.1, 'y': 0.35}  # Centered horizontally and positioned at 35% height
             spacing: Window.width * 0.01
             padding: Window.width * 0.01
+
 
