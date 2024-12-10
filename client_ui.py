@@ -99,8 +99,12 @@ class ClientUI(App):
                 )
 
                 cards = player_data.get("hand", [])
+                player_board = player_data.get("board", [])
+                enemy_board = enemy_data.get("board", [])
                 self.update_hand(cards)
-
+                print("I AM BEFORE UPDATE ARENA")
+                self.update_arena(player_board, enemy_board)
+                print("I AM AFTER UPDATED_ARENA")
                 # Check whose turn it is
                 if data["current_player"] == self.player_index:
                     self.update_status("It's your turn!")
@@ -141,11 +145,26 @@ class ClientUI(App):
         for card in cards:
             # Create card container
             card_box = FloatLayout(size_hint=(None, None), size=(Window.width * 0.1, Window.height * 0.2))
-            
-            # Draw the card background dynamically
-            with card_box.canvas.before:
-                Color(rgba=(1, 1, 1, 1))  # Background color (optional)
-                Rectangle(size=card_box.size, pos=card_box.pos, source="images/card_background.png")
+
+            # Background Image
+            background_image = Image(
+                source="images/card_background.png",  # Background image for the card
+                allow_stretch=True,
+                keep_ratio=False,
+                size_hint=(1, 1),
+                pos_hint={"x": 0, "y": 0}
+            )
+            card_box.add_widget(background_image)
+
+            # Card Image
+            card_img_src = f"images/{card['name'].lower()}.png" if os.path.exists(f"images/{card['name'].lower()}.png") else "images/placeholder.png"
+            card_image = Image(
+                source=card_img_src,
+                allow_stretch=True,
+                size_hint=(1, 0.6),
+                pos_hint={"x": 0, "y": 0.2}
+            )
+            card_box.add_widget(card_image)
 
             # Title Label
             card_title = Label(
@@ -157,17 +176,9 @@ class ClientUI(App):
                 halign='center',
                 size_hint=(1, None),
                 height=Window.height * 0.04,
-                pos_hint={'x': 0, 'y': 0.7}
+                pos_hint={"x": 0, "y": 0.8}
             )
-
-            # Card Image
-            card_img_src = f"images/{card['name'].lower()}.png" if os.path.exists(f"images/{card['name'].lower()}.png") else "images/placeholder.png"
-            card_image = Image(
-                source=card_img_src,
-                allow_stretch=True,
-                size_hint=(1, 0.6),
-                pos_hint={'x': 0, 'y': 0.1}
-            )
+            card_box.add_widget(card_title)
 
             # Description Label
             card_description = Label(
@@ -180,12 +191,8 @@ class ClientUI(App):
                 color=(1, 1, 1, 1),  # White text
                 size_hint=(1, None),
                 height=Window.height * 0.05,
-                pos_hint={'x': 0, 'y': 0}
+                pos_hint={"x": 0, "y": 0}
             )
-
-            # Add components to card container
-            card_box.add_widget(card_title)
-            card_box.add_widget(card_image)
             card_box.add_widget(card_description)
 
             # Add card to hand layout
@@ -201,6 +208,75 @@ class ClientUI(App):
         self.root.ids.enemy_health_label.text = f"Enemy HP: {enemy_hp}"
         self.root.ids.enemy_mana_label.text = f"Enemy Mana: {enemy_mana}"
         self.root.ids.enemy_shield_label.text = f"Enemy Shield: {enemy_shield}"
+
+    @mainthread
+    def update_arena(self, player_monsters, enemy_monsters):
+        arena_layout = self.root.ids.arena_layout
+        arena_layout.clear_widgets()  # Clear previous widgets
+
+        # Add enemy monsters (top row)
+        for monster in enemy_monsters:
+            monster_card = self.create_monster_card(monster)
+            arena_layout.add_widget(monster_card)
+
+        # Add player monsters (bottom row)
+        for monster in player_monsters:
+            monster_card = self.create_monster_card(monster)
+            arena_layout.add_widget(monster_card)
+
+    def create_monster_card(self, monster):
+        if monster:
+            card_box = FloatLayout(size_hint=(None, None), size=(Window.width * 0.1, Window.height * 0.2))
+
+            # Background
+            with card_box.canvas.before:
+                Color(rgba=(1, 1, 1, 1))  # Background color
+                Rectangle(size=card_box.size, pos=card_box.pos, source="images/card_background.png")
+
+            # Monster Image
+            card_img_src = f"images/{monster['name'].lower()}.png" if os.path.exists(f"images/{monster['name'].lower()}.png") else "images/placeholder.png"
+            card_image = Image(
+                source=card_img_src,
+                allow_stretch=True,
+                size_hint=(1, 0.6),
+                pos_hint={"x": 0, "y": 0.2}
+            )
+            card_box.add_widget(card_image)
+
+            # Monster Name
+            monster_title = Label(
+                text=monster['name'],
+                font_name='fonts/stats_font.ttf',
+                font_size=Window.height * 0.02,
+                bold=True,
+                color=(1, 1, 0, 1),
+                halign='center',
+                size_hint=(1, None),
+                height=Window.height * 0.04,
+                pos_hint={"x": 0, "y": 0.8}
+            )
+            card_box.add_widget(monster_title)
+
+            # Monster Stats
+            monster_stats = Label(
+                text=f"HP: {monster['health']}\nATK: {monster['attack']}\nDEF: {monster['shield']}",
+                font_name='fonts/stats_font.ttf',
+                font_size=Window.height * 0.015,
+                halign='center',
+                valign='middle',
+                text_size=(card_box.size[0], None),
+                color=(1, 1, 1, 1),
+                size_hint=(1, None),
+                height=Window.height * 0.05,
+                pos_hint={"x": 0, "y": 0}
+            )
+            card_box.add_widget(monster_stats)
+
+            return card_box
+        else:
+            # Empty Slot
+            return FloatLayout(size_hint=(None, None), size=(Window.width * 0.1, Window.height * 0.2))
+
 
 if __name__ == '__main__':
     ClientUI().run()

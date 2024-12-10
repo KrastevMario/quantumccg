@@ -1,17 +1,30 @@
 import asyncio
-
+import json
 
 class Card:
-    def __init__(self, id, name, health, mana, shield, type, cost, effect):
+    def __init__(self, id, name, health, attack, mana, shield, type, cost, effect):
         self.id = id
         self.name = name
         self.health = health
+        self.attack = attack
         self.mana = mana
         self.shield = shield
         self.type = type
         self.cost = cost
         self.effect = effect
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "health": self.health,
+            "attack": self.attack,
+            "mana": self.mana,
+            "shield": self.shield,
+            "type": self.type,
+            "cost": self.cost,
+            "effect": self.effect,
+        }
 
 class Player:
     def __init__(self, websocket):
@@ -21,8 +34,9 @@ class Player:
         self.mana = 10
         self.shield = 0
         self.deck = [
-            Card(1, "Fireball", 0, 0, 0, "Spell", 3, "deal 5 damage"),
-            Card(2, "Shield", 0, 0, 0, "Spell", 2, "gain 3 shield"),
+            Card(1, "Fireball", 0, 0, 0, 0, "Spell", 3, "deal 5 damage"),
+            Card(2, "Monster1", 20, 139, 0, 0, "Monster", 2, "self gain 3 shield"),
+            Card(3, "Shield", 0, 0, 0, 0, "Spell", 2, "gain 3 shield"),
         ]
         self.hand = []
         self.board = []
@@ -101,16 +115,17 @@ class Game:
                     "health": p.health,
                     "mana": p.mana,
                     "shield": p.shield,
-                    "hand": [{"id": c.id, "name": c.name, "health": c.health, "mana": c.mana, "type": c.type, "cost": c.cost, "effect": c.effect, "shield": c.shield} for c in p.hand],
-                    "board": p.board
+                    "hand": [c.to_dict() for c in p.hand],  # Serialize cards
+                    "board": [c.to_dict() for c in p.board] if p.board else []  # Serialize board cards
                 }
                 for p in self.players
             ]
         }
         import json
-        msg = json.dumps(state)
+        msg = json.dumps(state)  # Now JSON serializable
         for p in self.players:
             await self.safe_send(p.websocket, msg)
+
 
     async def safe_send(self, websocket, message):
         try:
@@ -152,8 +167,12 @@ class GameManager:
             if card:
                 current_p = game.current_player()
                 opponent = game.opponent_player()
+                if card.type.lower() == "monster":
+                    current_p.board.append(card)
                 if "deal" in card.effect:
                     CardEffects.apply_effect(game, player, opponent, card.effect)
+                if "self" in card.effect:
+                    CardEffects.apply_effect(game, card, opponent, card.effect)
                 else:
                     CardEffects.apply_effect(game, player, player, card.effect)
                 game.end_turn()
